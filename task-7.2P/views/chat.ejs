@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>BookShelf Chat</title>
+  <script src="/socket.io/socket.io.js"></script>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 40px; background-color: #f5f5f5; }
+    h3 { color: #1565c0; }
+    ul { list-style: none; padding: 0; }
+    li { background: #e3f2fd; padding: 8px 12px; margin: 5px 0; border-radius: 6px; }
+    input { padding: 8px; width: 250px; border-radius: 4px; border: 1px solid #ccc; }
+    button { padding: 8px 12px; margin-left: 6px; background: #1565c0; color: white; border: none; border-radius: 4px; }
+  </style>
+</head>
+<body>
+  <h3>BookShelf Live Chat</h3>
+  <ul id="messages"></ul>
+  <input id="msg" placeholder="Type a message" autocomplete="off">
+  <button onclick="send()">Send</button>
+
+  <script>
+    const socket = io();
+    const messages = document.getElementById("messages");
+    const input = document.getElementById("msg");
+
+    socket.on("chatMessage", (msg) => {
+      const li = document.createElement("li");
+      li.textContent = msg;
+      messages.appendChild(li);
+    });
+
+    function send() {
+      const message = input.value.trim();
+      if (message) socket.emit("chatMessage", message);
+      input.value = "";
+    }
+  </script>
+</body>
+</html>
